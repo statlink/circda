@@ -1,0 +1,38 @@
+\name{circda-package}
+\alias{circda-package}
+\docType{package}
+\title{
+Circular Data Analysis
+}
+
+\description{
+Functions to perform maximum likelihood estimation, model-based clustering,
+discriminant and regression analysis with a circular response variable
+}
+
+\details{
+\tabular{ll}{
+Package: \tab circda\cr
+Type: \tab Package\cr
+Version: \tab 1.0 \cr
+Date: \tab 2026-07-06 \cr
+}
+}
+
+\author{
+Michail Tsagris \email{mtsagris@uoc.gr}
+}
+
+\section{Maintainers}{
+Michail Tsagris <mtsagris@uoc.gr>.
+}
+
+\references{
+Scealy J.L. and Wood A.T.A. (2019). Scaled von Mises-Fisher distributions and regression models for paleomagnetic directional data.
+Journal of the American Statistical Association, 114(528):  1547--1560.
+}
+
+
+
+
+

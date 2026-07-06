@@ -1,0 +1,85 @@
+\name{dirda.cv}
+\alias{circda.cv}
+\title{
+Cross validation for estimating the classification rate
+}
+
+\description{
+Cross validation for estimating the classification rate.
+}
+
+\usage{
+circda.cv(u, ina, rads = TRUE, folds = NULL, nfolds = 10, stratified = FALSE,
+          type = c("vm", "cp", "pn", "gcpc", "cipc"), seed = NULL)
+}
+
+\arguments{
+\item{u}{
+A numerical vector with the data (expressed in radians, or angles).
+}
+\item{ina}{
+A variable indicating the groupings.
+}
+\item{rads}{
+If the data are expressed in angles set this to FALSE.
+}
+\item{folds}{
+Do you already have a list with the folds? If not, leave this NULL.
+}
+\item{nfolds}{
+How many folds to create?
+}
+\item{stratified}{
+Should the folds be created in a stratified way? i.e. keeping the distribution of the groups
+similar through all folds?
+}
+\item{seed}{
+If seed is TRUE, the results will always be the same.
+}
+\item{type}{
+The distribution to fit, "vm" is von Mises distribution, "cp" is the circular Purkayastha distribution,
+"pn" is projected normal distribution, "gcpc" is GCPC distribution and "cipc" is CIPC
+(or wrapped Caucy) distribution.
+}
+}
+
+\details{
+Cross-validation for the estimation of the performance of a classifier.
+}
+
+\value{
+A vector with 5 numbers, one for each distribution, containing the percentage of
+correct classification. If you chose less distributions to test, the elements of
+the non-chosen distributions will contain NAs.
+}
+
+\references{
+Tsagris M., Papastamoulis P. and Kato S. (2025). Directional data analysis using the spherical Cauchy and the Poisson kernel-based distribution.
+Statistics and Computing, 35:51.
+
+Tsagris M. and Alenazi A. (2019). Comparison of discriminant analysis methods on the sphere.
+Communications in Statistics: Case Studies, Data Analysis and Applications, 5(4), 467--491.
+
+Mardia K. V. and Jupp, P. E. (2000). Directional statistics. Chicester: John Wiley & Sons.
+
+Morris J. E. and Laycock P. J. (1974). Discriminant analysis of directional data. Biometrika, 61(2): 335--341.
+}
+
+\author{
+Michail Tsagris.
+
+R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr}.
+}
+%\note{
+  %%  ~~further notes~~
+    %}
+
+\seealso{
+\code{\link{circ.da}
+}
+}
+
+\examples{
+ina <- sample.int(2, 300, replace = TRUE)
+}
+

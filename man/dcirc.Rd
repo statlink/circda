@@ -1,0 +1,71 @@
+\name{dcirc}
+\alias{dcirc}
+\title{
+Density values for circular distributions
+}
+
+\description{
+Density values for circular distributions.
+}
+
+\usage{
+dcirc(u, rads = TRUE, mu, kappa, rho, type = "vm", logden = FALSE)
+}
+
+\arguments{
+\item{u}{
+A vector with the values at which the density is to be computed.
+}
+\item{rads}{
+The data are expressed in rads (TRUE) or angles (FALSE)?
+}
+\item{mu}{A vector with the circular mean (in radians).
+}
+\item{kappa}{
+A vector with the concentration parameter.
+}
+\item{rho}{
+A vector with the \eqn{\rho} parameter of the GCPC distribution.
+}
+\item{type}{
+The distribution to fit, "vm" is von Mises distribution, "cp" is the circular Purkayastha distribution,
+"pn" is projected normal distribution, "gcpc" is GCPC distribution and "cipc" is CIPC
+(or wrapped Caucy) distribution.
+}
+\item{logden}{
+If you want the log of the density set this equal to TRUE.
+}
+}
+
+\details{
+The function computes the density of a given circular distribution at the given points.
+}
+
+\value{
+A vector with the density values of the circular distribution computed at the given points.
+}
+
+\references{
+Perdikis T., Alharbi N. and Tsagris M. (2026). Model--based clustering for spherical
+and hyper--spherical data using elliptically symmetric distributions.
+
+https://arxiv.org/abs/2605.27496
+}
+
+\author{
+Michail Tsagris.
+
+R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr}.
+}
+%\note{
+%%  ~~further notes~~
+%}
+\seealso{
+\code{\link{rcirc}
+}
+}
+
+\examples{
+x <- as.matrix( iris[, 1:3] )
+x <- x / sqrt( rowSums(x^2) )
+}
