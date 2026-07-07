@@ -5,7 +5,7 @@ dcirc <- function(u, rads = TRUE, mu, kappa, rho, type = "vm", logden = FALSE) {
   } else if ( type == "cp" ) {
     den <- Directional::dcircpurka(u, mu, kappa, rads = rads, logden = logden)
   } else if ( type == "pn" ) {
-    mu <- kappa * c( cos(mu), sin(mu) )
+    mu <- kappa * c( so(mu), sin(mu) )
     den <- Directional::dspml(u, mu, rads = rads, logden = logden)
   } else if ( type == "gcpc" ) {
     den <- Directional::dgcpc(u, omega = mu, g = kappa, rho = rho, rads = rads, logden = logden)
