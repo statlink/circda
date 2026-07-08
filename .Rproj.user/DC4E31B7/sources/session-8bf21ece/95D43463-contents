@@ -1,0 +1,95 @@
+\name{circ.mle}
+\alias{circ.mle}
+\title{
+MLE of a circular distribution
+}
+
+\description{
+MLE of a circular distribution.
+}
+
+\usage{
+circ.mle(u, rads = TRUE, type ="vm", tol = 1e-6, maxiters = 100)
+}
+
+\arguments{
+\item{u}{
+A vector with the circular data expressed in radians, or angles.
+}
+\item{rads}{
+If the data are expressed in angles set this to FALSE.
+}
+\item{type}{
+The distribution to fit, "vm" is von Mises distribution, "cp" is the circular Purkayastha distribution,
+"pn" is projected normal distribution, "gcpc" is GCPC distribution and "cipc" is CIPC
+(or wrapped Caucy) distribution.
+}
+\item{tol}{
+The tolerance value to terminate the Newton-Raphson algorithm.
+}
+\item{maxiters}{
+The maximum number of iterations the Newton-Raphson algorithm will perform.
+}
+}
+
+\details{
+The function performs MLE of circular distributions.
+}
+
+\value{
+A list including:
+\item{param}{
+A matrix with the mixing probability of each group and the estimated parameters of
+the chosen distribution.
+}
+\item{loglik}{
+The value of the maximised log-likelihood of the chosen distribution.
+}
+\item{iter}{
+The number of iteration required by the EM algorithm.
+}
+\item{runtime}{
+The run time of the algorithm. A numeric vector. The first element is the user time, the second element is the system time and the third element is the elapsed time.
+}
+}
+
+\references{
+Mardia K. V. and Jupp P. E. (2000). Directional statistics. Chicester: John Wiley & Sons.
+
+Sra S. (2012). A short note on parameter approximation for von Mises-Fisher distributions:
+and a fast implementation of \eqn{I_s(x)}. Computational Statistics, 27(1): 177--190.
+
+Presnell Brett, Morrison Scott P. and Littell Ramon C. (1998). Projected multivariate linear models for directional data. Journal of the American Statistical Association, 93(443): 1068--1077.
+
+Tsagris M. and Alzeley O. (2025). Circular and spherical projected Cauchy distributions:
+A Novel Framework for Circular and Directional Data Modelling.
+Australian & New Zealand Journal of Statistics, 67(1): 77--103.
+https://arxiv.org/pdf/2302.02468.pdf
+
+Alzeley O. and Tsagris M. (2026). On the generalized circular projected Cauchy distribution.
+Mathematics, 14(11): 1934. https://www.mdpi.com/2227-7390/14/11/1934
+
+Purkayastha S. (1991). A Rotationally Symmetric Directional Distribution: Obtained through Max-
+imum Likelihood Characterization. The Indian Journal of Statistics, Series A, 53(1): 70--83.
+
+Cabrera J. and Watson G. S. (1990). On a spherical median related distribution. Communications
+in Statistics-Theory and Methods, 19(6): 1973--1986
+}
+
+\author{
+Michail Tsagris.
+
+R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr}.
+}
+%\note{
+%%  ~~further notes~~
+%}
+\seealso{
+\code{\link{bic.mixcirc}
+}
+}
+
+\examples{
+x <- as.matrix( iris[, 1:3] )
+x <- x / sqrt( rowSums(x^2) )
+}

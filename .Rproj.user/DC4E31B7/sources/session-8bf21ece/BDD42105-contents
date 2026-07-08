@@ -76,7 +76,7 @@ R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr}.
 %%  ~~further notes~~
 %}
 \seealso{
-\code{\link{circ.reg}
+\code{\link{circ.mle}
 }
 }
 

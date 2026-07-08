@@ -1,0 +1,84 @@
+\name{circ.regs}
+\alias{circ.regs}
+\title{
+Many simple circular regressions
+}
+
+\description{
+Many simple circular regressions.
+}
+
+\usage{
+circ.regs(y, x, rads = TRUE, type = "vm", tol = 1e-6, logged = FALSE,
+maxiters = 100, ncores = 1)
+}
+
+\arguments{
+\item{y}{
+A vector with the circular data expressed in radians, or angles.
+}
+\item{x}{
+A numerical matrix with many variables. A circular regression will be fit to each of these variables.
+}
+\item{rads}{
+If the data are expressed in angles set this to FALSE.
+}
+\item{type}{
+The distribution to fit, "vm" is von Mises distribution, "cp" is the circular Purkayastha distribution,
+"pn" is projected normal distribution, and "cipc" is CIPC (or wrapped Caucy) distribution.
+}
+\item{tol}{
+The tolerance value to terminate the Newton-Raphson algorithm.
+}
+\item{logged}{
+Do you want the logarithm of the p-value to be returned?
+}
+\item{maxiters}{
+The maximum number of iterations the Newton-Raphson algorithm will perform.
+}
+\item{ncores}{
+A number specifying the number of cores to use. If more than 1, then parallel processing is performed.
+}
+}
+
+\details{
+The function performs many regressions with one circular dependent variable and one
+Euclidean independent variable. For each colum of x a circular regression model is
+fitted and the hypothesis testing of no association between y and this variable is performed.
+}
+
+\value{
+A matrix with two columns, the test statistics and their associated (log) p-values.
+}
+
+\references{
+Mardia K. V. and Jupp P. E. (2000). Directional statistics. Chicester: John Wiley & Sons.
+
+Presnell Brett, Morrison Scott P. and Littell Ramon C. (1998). Projected multivariate linear models for directional data. Journal of the American Statistical Association, 93(443): 1068--1077.
+
+Tsagris M. and Alzeley O. (2025). Circular and spherical projected Cauchy distributions:
+A Novel Framework for Circular and Directional Data Modelling.
+Australian & New Zealand Journal of Statistics, 67(1): 77--103.
+https://arxiv.org/pdf/2302.02468.pdf
+
+Purkayastha S. (1991). A Rotationally Symmetric Directional Distribution: Obtained through Max-
+imum Likelihood Characterization. The Indian Journal of Statistics, Series A, 53(1): 70--83.
+}
+
+\author{
+Michail Tsagris.
+
+R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr}.
+}
+%\note{
+%%  ~~further notes~~
+%}
+\seealso{
+\code{\link{circ.mle}
+}
+}
+
+\examples{
+x <- as.matrix( iris[, 1:3] )
+x <- x / sqrt( rowSums(x^2) )
+}

@@ -1,0 +1,93 @@
+circ.regs <- function(y, x, rads = TRUE, type = "vm", tol = 1e-6, logged = FALSE, maxiters = 100, ncores = 1) {
+
+  if ( !is.matrix(y) ) {
+    if ( !rads )  y <- y * pi / 180
+    y <- cbind( cos(y), sin(y) )
+  }
+
+  if ( type == "pn" ) {
+    parallel <- FALSE
+    if  ( ncores > 1 )  parallel <- TRUE
+    res <- Directional::spml.regs(y = y, x = x, tol = tol, logged = logged, maxiters = maxiters, parallel = parallel )
+
+  } else {
+    if ( type == "vm" ) {
+      lik0 <- Rfast::vmf.mle(y, tol = tol)$loglik
+      lik <- .vm.regs(y = y, x = x, tol = tol, maxiters = maxiters)
+      stat <- 2 * (lik - lik0)
+    } else if ( type == "cp" ) {
+      lik0 <- Rfast::purka.mle(y, tol = tol)$loglik
+      lik <- .circpurka.regs(y = y, x = x)
+      stat <- 2 * (lik - lik0)
+    } else if ( type == "cipc" ) {
+      y1 <- ( atan(y[, 2]/y[, 1]) + pi * I(y[, 1] < 0) ) %% (2 * pi)
+      lik0 <- Directional::cipc.mle(y1, rads = TRUE, tol = tol)$loglik
+      lik <- .cipc.regs(y = y, x = x, tol = tol, maxiters = maxiters)
+      stat <- 2 * (lik - lik0)
+    }
+    pvalue <- pchisq(stat, 2, lower.tail = FALSE, log.p = logged)
+    res <- cbind(stat, pvalue)
+    names(res) <- c("stat", "p-value")
+  }
+
+  res
+}
+
+
+.vm.regs(y = y, x = x, tol = tol, maxiters = maxiters, ncores = 1) {
+
+  p <- dim(x)[2]
+  stat <- numeric(p)
+
+  if ( ncores <= 1 ) {
+    for ( j in 1:p )  stat[j] <- .vm.reg(y, x, tol = tol, maxiters = maxiters)$loglik
+  } else {
+    cl <- parallel::makeCluster(ncores)
+    parallel::clusterExport(cl, varlist = c("y", "x", "tol", "maxiters", ".vm.reg"), envir = environment())
+    stat <- parallel::parSapply(cl, 1:p, function(j) {
+      .vm.reg(y, x, tol = tol, maxiters = maxiters)$loglik
+    })
+    parallel::stopCluster(cl)
+  }
+  stat
+}
+
+
+.cp.regs(y = y, x = x, tol = tol, maxiters = maxiters, ncores = 1) {
+
+  p <- dim(x)[2]
+  stat <- numeric(p)
+
+  if ( ncores <= 1 ) {
+    for ( j in 1:p )  stat[j] <- Directional::circpurka.reg(y, x, tol = tol, maxiters = maxiters)$loglik
+  } else {
+    cl <- parallel::makeCluster(ncores)
+    parallel::clusterEvalQ(cl, library(Directional) )
+    parallel::clusterExport(cl, varlist = c("y", "x", "tol", "maxiters"), envir = environment())
+    stat <- parallel::parSapply(cl, 1:p, function(j) {
+      Directional::circpurka.reg(y, x[, j], tol = tol, maxiters = maxiters)$loglik
+    })
+    parallel::stopCluster(cl)
+  }
+  stat
+}
+
+.cipc.regs(y = y, x = x, rads = rads, xnew = xnew, tol = tol, maxiters = maxiters, ncores = 1) {
+
+  p <- dim(x)[2]
+  stat <- numeric(p)
+
+  if ( ncores <= 1 ) {
+    for ( j in 1:p )  stat[j] <- Directional::circpurka.reg(y, x, tol = tol, maxiters = maxiters)$loglik
+  } else {
+    cl <- parallel::makeCluster(ncores)
+    parallel::clusterEvalQ(cl, library(Directional) )
+    parallel::clusterExport(cl, varlist = c("y", "x", "tol", "maxiters"), envir = environment())
+    stat <- parallel::parSapply(cl, 1:p, function(j) {
+      Directional::cipc.reg(y, x[, j], tol = tol, maxiters = maxiters)$loglik
+    })
+    parallel::stopCluster(cl)
+  }
+  stat
+}
+
