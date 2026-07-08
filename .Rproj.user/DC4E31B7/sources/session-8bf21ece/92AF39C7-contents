@@ -1,20 +1,20 @@
-\name{circ.mle}
-\alias{circ.mle}
+\name{colcirc.mle}
+\alias{colcirc.mle}
 \title{
-MLE of a circular distribution
+Column-wise MLE of some circular distributions
 }
 
 \description{
-MLE of a circular distribution.
+Column-wise MLE of some circular distributions.
 }
 
 \usage{
-circ.mle(u, rads = TRUE, type ="vm", tol = 1e-6, maxiters = 100)
+colcirc.mle(u, rads = TRUE, type = "vm", tol = 1e-07, maxiters = 100, parallel = FALSE)
 }
 
 \arguments{
 \item{u}{
-A vector with the circular data expressed in radians, or angles.
+A numerical matrix with the circular data.
 }
 \item{rads}{
 If the data are expressed in angles set this to FALSE.
@@ -25,32 +25,23 @@ The distribution to fit, "vm" is von Mises distribution, "cp" is the circular Pu
 (or wrapped Caucy) distribution.
 }
 \item{tol}{
-The tolerance value to terminate the Newton-Raphson algorithm.
+The tolerance level to stop the iterative process of finding the MLEs.
 }
 \item{maxiters}{
-The maximum number of iterations the Newton-Raphson algorithm will perform.
+The maximum number of iterations to implement. This is for the "spml" only.
+}
+\item{parallel}{
+Should the computations take place in parallel? This is for the "spml" only.
 }
 }
 
 \details{
-The function performs MLE of circular distributions.
+The function performs MLE of circular distributions for each column of a matrix.
 }
 
 \value{
-A list including:
-\item{param}{
-A matrix with the mixing probability of each group and the estimated parameters of
-the chosen distribution.
-}
-\item{loglik}{
-The value of the maximised log-likelihood of the chosen distribution.
-}
-\item{iter}{
-The number of iteration required by the EM algorithm.
-}
-\item{runtime}{
-The run time of the algorithm. A numeric vector. The first element is the user time, the second element is the system time and the third element is the elapsed time.
-}
+A matrix with two, columns. The first one contains the parameters of the distribution
+and the second columns contains the log-likelihood values.
 }
 
 \references{
@@ -81,15 +72,17 @@ Michail Tsagris.
 
 R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr}.
 }
+
 %\note{
 %%  ~~further notes~~
 %}
 \seealso{
-\code{\link{mixcirc.mle}
+\code{\link{circ.mle}
 }
 }
 
 \examples{
-u <- rcirc(100, mu = 3, kappa = 2, rads = TRUE, type = "vm")
-circ.mle(u, rads = TRUE, type = "vm")
+u <- matrix( circda::rcirc(200 * 10, mu = 3, kappa = 5), ncol = 10 )
+res <- colcirc.mle(u)
 }
+

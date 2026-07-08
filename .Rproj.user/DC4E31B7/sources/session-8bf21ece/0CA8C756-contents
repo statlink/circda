@@ -1,5 +1,5 @@
-\name{mix.circplot}
-\alias{mix.circplot}
+\name{circplot}
+\alias{circplot}
 \title{
 Circular histogram
 }
@@ -9,15 +9,12 @@ Histogram of circular data.
 }
 
 \usage{
-mix.circplot(u, ina, mu, rads = TRUE, lwd = 2)
+circplot(u, mu = NULL, rads = TRUE, col = 3, lwd = 2)
 }
 
 \arguments{
 \item{u}{
 A vector with the circular data expressed in radians, or angles.
-}
-\item{ina}{
-A numeric vector indicating the groups of the data.
 }
 \item{mu}{
 The estimated circular mean or a circular location estimate. If this
@@ -26,8 +23,11 @@ is not available the circular mean is caclulated internally.
 \item{rads}{
 If the data are expressed in angles set this to FALSE.
 }
+\item{col}{
+The color of the arrow pointing the mean direction.
+}
 \item{lwd}{
-The thickness of the above arrow of the circular means.
+The thickness of the above arrow of the circular mean.
 }
 }
 
@@ -35,7 +35,7 @@ The thickness of the above arrow of the circular means.
 %}
 
 \value{
-A circular histogram ith different colours for each group and each circular mean.
+A circular histogram.
 }
 
 %\references{
@@ -52,13 +52,12 @@ R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr}.
 %}
 
 \seealso{
-\code{ \link{circplot}
+\code{ \link{circ.mle}
 }
 }
 
 \examples{
-u <- c( rnorm(50, 1, 0.3 ), rnorm(50, 2, 0.5 ) )
-ina <- rep(1:2, each = 50)
-mix.circplot(u, ina = ina, mu = c(1, 3) )
+u <- rnorm(100, rnorm(3, 0.2) )
+circplot(u, 3)
 }
 

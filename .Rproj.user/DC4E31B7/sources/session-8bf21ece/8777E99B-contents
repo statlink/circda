@@ -84,8 +84,9 @@ R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr}.
 }
 
 \examples{
-u1 <- rnorm(100)
-u2 <- rnorm(100, 1, 0.5)
+u1 <- runif(100)
+u2 <- runif(100, 0.5, 1.5)
 u <- c(u1, u2)
 mixcirc.mle(u, type = "vm")
+
 }

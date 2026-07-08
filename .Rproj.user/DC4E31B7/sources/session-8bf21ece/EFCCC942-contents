@@ -70,8 +70,8 @@ R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr}.
 }
 
 \examples{
-u1 <- rnorm(50, 3, 0.2)
-u2 <- rnorm(50, 5, 0.4)
+u1 <- rnorm(50, 0.1)
+u2 <- rnorm(50, 0.1)
 u <- c(u1, u2)
 ina <- rep(1:2, each = 50)
 est <- circ.da(u, u, ina)

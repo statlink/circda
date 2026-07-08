@@ -1,0 +1,108 @@
+circ.reg <- function(y, x, rads = TRUE, type = "vm", xnew = NULL, tol = 1e-6, maxiters = 100) {
+
+  if ( !is.matrix(y) ) {
+    if ( !rads )  y <- y * pi / 180
+    y <- cbind( cos(y), sin(y) )
+  }
+
+  if ( type == "vm" ) {
+    res <- .vm.reg(y = y, x = x, rads = rads, xnew = xnew, tol = tol, maxiters = maxiters)
+  } else if ( type == "cp" ) {
+    res <- Directional::circpurka.reg(y = y, x = x, rads = rads, xnew = xnew)
+  } else if ( type == "pn" ) {
+    res <- Directional::spml.reg(y = y, x = x, rads = rads, xnew = xnew, tol = tol, maxiters = maxiters)
+  } else if ( type == "gcpc" ) {
+    res <- Directional::gcpc.reg(y = y, x = x, rads = rads, xnew = xnew)
+  } else if ( type == "cipc" ) {
+    res <- Directional::cipc.reg(y = y, x = x, rads = rads, xnew = xnew, tol = tol, maxiters = maxiters)
+  }
+  res
+}
+
+
+
+.vm.reg <- function(y, x, rads = TRUE, xnew = NULL, tol = 1e-6, maxiters = 100) {
+
+  tic <- proc.time()
+
+  x <- model.matrix( ~., data.frame(x) )
+  dm <- dim(x)
+  n <- dm[1]  ;  p <- dm[2] - 1
+
+  be <- solve( crossprod(x), crossprod(x, y) )  ## initial values for the beta
+  mu <- x %*% be
+  ki <- sqrt( Rfast::rowsums(mu^2) )
+  lik1 <- sum(mu * y) - sum( log(besselI(ki, 0, expon.scaled = TRUE) ) + ki )
+
+  A1  <- besselI(ki, 1) / besselI(ki, 0)                  ## n
+  A1d <- 1 - A1 / ki - A1^2                               ## A'_1(kappa), n
+  ## --- gradient: p x 2 ---
+  resid <- y - (A1 / ki) * mu                             ## n x 2
+  grad <- crossprod(x, resid)                            ## p x 2
+  ## --- Hessian weights ---
+  mu_ki  <- mu / ki                                       ## n x 2, unit vectors
+  d11 <- A1d * mu_ki[, 1]^2 + (A1 / ki) * (1 - mu_ki[, 1]^2)
+  d22 <- A1d * mu_ki[, 2]^2 + (A1 / ki) * (1 - mu_ki[, 2]^2)
+  d12 <- (A1d - A1/ki) * mu_ki[, 1] * mu_ki[, 2]
+  ## --- Hessian blocks: each is p x p ---
+  H11 <-  -crossprod(x * d11, x)
+  H22 <-  -crossprod(x * d22, x)
+  H12 <-  -crossprod(x * d12, x)
+  ## --- full 2p x 2p Hessian ---
+  H <- rbind( cbind(H11, H12), cbind(H12, H22) )
+
+  be <- be - solve(H, as.vector(grad) )
+  be <- matrix(be, ncol = 2)
+  mu <- x %*% be
+  ki <- sqrt( Rfast::rowsums(mu^2) )
+  lik2 <- sum(mu * y) - sum( log(besselI(ki, 0, expon.scaled = TRUE) ) + ki )
+
+  i <- 2
+  while ( lik2 - lik1 > tol  &  i < maxiters ) {
+    i <- i + 1
+    lik1 <- lik2
+
+    A1  <- besselI(ki, 1) / besselI(ki, 0)                  ## n
+    A1d <- 1 - A1 / ki - A1^2                               ## A'_1(kappa), n
+    ## --- gradient: p x 2 ---
+    resid <- y - (A1 / ki) * mu                             ## n x 2
+    grad <- crossprod(x, resid)                            ## p x 2
+    ## --- Hessian weights ---
+    mu_ki  <- mu / ki                                       ## n x 2, unit vectors
+    d11 <- A1d * mu_ki[, 1]^2 + (A1 / ki) * (1 - mu_ki[, 1]^2)
+    d22 <- A1d * mu_ki[, 2]^2 + (A1 / ki) * (1 - mu_ki[, 2]^2)
+    d12 <- (A1d - A1/ki) * mu_ki[, 1] * mu_ki[, 2]
+    ## --- Hessian blocks: each is p x p ---
+    H11 <-  -crossprod(x * d11, x)
+    H22 <-  -crossprod(x * d22, x)
+    H12 <-  -crossprod(x * d12, x)
+    ## --- full 2p x 2p Hessian ---
+    H <- rbind( cbind(H11, H12), cbind(H12, H22) )
+
+    be <- be - solve(H, as.vector(grad) )
+    be <- matrix(be, ncol = 2)
+    mu <- x %*% be
+    ki <- sqrt( Rfast::rowsums(mu^2) )
+    lik2 <- sum(mu * y) - sum( log(besselI(ki, 0, expon.scaled = TRUE) ) + ki )
+  }
+
+  runtime <- proc.time() - tic
+
+  est <- NULL
+  if ( !is.null(xnew) ) {
+    xnew <- model.matrix(~., data.frame(xnew))
+    est <- xnew %*% be
+    est <- ( atan(est[, 2]/est[, 1]) + pi * I(est[, 1] < 0) ) %% (2 * pi)
+    if ( !rads )  est <- est * 180 / pi
+  }
+
+  seb <- sqrt( - diag( solve(H) ) )
+  seb <- matrix(seb, ncol = 2)
+  colnames(be) <- colnames(seb) <- c("Cosinus of y", "Sinus of y")
+  rownames(be) <- rownames(seb) <- colnames(x)
+
+  loglik <- lik2 - n * log(2 * pi)
+
+  list(runtime = runtime, be = be, seb = seb, loglik = loglik, ki = ki, est = est)
+
+}
