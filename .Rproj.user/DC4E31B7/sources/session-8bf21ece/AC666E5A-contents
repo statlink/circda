@@ -1,0 +1,18 @@
+#useDynLib(pchc, .registration = TRUE)
+
+importFrom("Directional", makefolds, purka.mle, spml.mle, gcpc.mle2, cipc.mle,
+           dvm, dspml, dpurka, dgcpc, dcipc, mixvmf.mle, mixspcauchy.mle, rvonmises,
+           bic.mixvmf, bic.mixspcauchy, rmixvmf, rcircpurka, rspml, rgcpc, rcipc,
+           colvm.mle, colspml.mle)
+importFrom("Rfast", colmeans, rowsums, vm.mle, rowMaxs,
+           mediandir, vmf.mle, eachcol.apply)
+omportFrom("Rfast2", purka.mle)
+importFrom("stats", kmeans, optimize, optim, pnorm, dnorm, rnorm, model.matrix,
+           pchisq)
+importFrom("graphics", abline, lines, points, arrows)
+importFrom("rangen", Runif)
+importFrom("circular", circular)
+
+exportPattern("^[[:alpha:]]+")
+exportPattern("^[^\\.]")
+
