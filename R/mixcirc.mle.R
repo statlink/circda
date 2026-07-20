@@ -151,7 +151,7 @@ mixcirc.mle <- function(u, type = "vm", rads = TRUE, g = 2, tol = 1e-4, maxiters
   theta <- Rfast::mediandir(x)  # unweighted start
   for ( iter in 1:500 ) {
     ct <- drop(x %*% theta)
-    ct <- pmin(pmax(ct, -1 + eps), 1 - eps)   # keep away from ±1
+    ct <- pmin(pmax(ct, -1 + eps), 1 - eps)   # keep away from +/-1
     d <- pmax(acos(ct), eps)
     wts <- w / d
     g <- Rfast::eachcol.apply(x, wts)
