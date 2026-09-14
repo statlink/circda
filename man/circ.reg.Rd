@@ -71,7 +71,7 @@ Poisson kernel-based distribution.
 Statistics and Computing, 35:51.
 
 Presnell B., Morrison S. P. and Littell Ramon C. (1998). Projected multivariate linear models for directional data.
-Journal of the American Statistical Association, 93(443): 1068–-1077.
+Journal of the American Statistical Association, 93(443): 1068--1077.
 
 Koh, Pang Wei and Liang, Percy (2017). Understanding Black-Box Predictions via Influence Functions.
 International Conference on Machine Learning, 1885--1894.
