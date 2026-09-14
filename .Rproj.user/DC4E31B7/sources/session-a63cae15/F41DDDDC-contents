@@ -60,21 +60,13 @@ The value of the maximised log-likelihood of the chosen distribution.
 The number of iteration required by the EM algorithm.
 }
 \item{runtime}{
-The run time of the algorithm. A numeric vector. The first element is the user time, the second element
-is the system time and the third element is the elapsed time.
+The run time of the algorithm. A numeric vector. The first element is the user time, the second element is the system time and the third element is the elapsed time.
 }
 }
 
 \references{
-Tsagris M., Papastamoulis P. and Kato S. (2025). Directional data analysis using the spherical Cauchy and the
-Poisson kernel-based distribution.
-Statistics and Computing, 35:51.
-
-Presnell B., Morrison S. P. and Littell Ramon C. (1998). Projected multivariate linear models for directional data.
-Journal of the American Statistical Association, 93(443): 1068–-1077.
-
 Koh, Pang Wei and Liang, Percy (2017). Understanding Black-Box Predictions via Influence Functions.
-International Conference on Machine Learning, 1885--1894.
+International Conference on Machine Learning, pages = 1885--1894.
 }
 
 \author{

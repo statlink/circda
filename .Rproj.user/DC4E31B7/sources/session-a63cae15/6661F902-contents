@@ -9,7 +9,7 @@ Regression model using a circular distribution.
 }
 
 \usage{
-circ.reg(y, x, rads = TRUE, type = "vm", influence = FALSE, xnew = NULL, tol = 1e-6, maxiters = 100)
+circ.reg(y, x, rads = TRUE, type = "vm", xnew = NULL, tol = 1e-6, maxiters = 100)
 }
 
 \arguments{
@@ -26,10 +26,6 @@ If the data are expressed in angles set this to FALSE.
 The distribution to fit, "vm" is von Mises distribution, "cp" is the circular Purkayastha distribution,
 "pn" is projected normal distribution, "gcpc" is GCPC distribution and "cipc" is CIPC
 (or wrapped Caucy) distribution.
-}
-\item{influence}{
-If TRUE, this will compute the influence value of each observation based on the formula of
-Koh and Liang (2017).
 }
 \item{xnew}{
 The new values of some independent variable(s) whose circular values you want to predict.
@@ -60,21 +56,15 @@ The value of the maximised log-likelihood of the chosen distribution.
 The number of iteration required by the EM algorithm.
 }
 \item{runtime}{
-The run time of the algorithm. A numeric vector. The first element is the user time, the second element
-is the system time and the third element is the elapsed time.
+The run time of the algorithm. A numeric vector. The first element is the user time, the second element is the system time and the third element is the elapsed time.
 }
 }
 
 \references{
-Tsagris M., Papastamoulis P. and Kato S. (2025). Directional data analysis using the spherical Cauchy and the
-Poisson kernel-based distribution.
-Statistics and Computing, 35:51.
+Perdikis T., Alharbi N. and Tsagris M. (2026). Model--based clustering for spherical
+and hyper--spherical data using elliptically symmetric distributions.
 
-Presnell B., Morrison S. P. and Littell Ramon C. (1998). Projected multivariate linear models for directional data.
-Journal of the American Statistical Association, 93(443): 1068–-1077.
-
-Koh, Pang Wei and Liang, Percy (2017). Understanding Black-Box Predictions via Influence Functions.
-International Conference on Machine Learning, 1885--1894.
+https://arxiv.org/abs/2605.27496
 }
 
 \author{

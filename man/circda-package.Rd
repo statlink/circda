@@ -15,7 +15,7 @@ discriminant and regression analysis with a circular response variable.
 Package: \tab circda\cr
 Type: \tab Package\cr
 Version: \tab 1.1 \cr
-Date: \tab 2026-07-30 \cr
+Date: \tab 2026-09-14 \cr
 }
 }
 
@@ -28,8 +28,11 @@ Michail Tsagris <mtsagris@uoc.gr>.
 }
 
 \references{
-Scealy J.L. and Wood A.T.A. (2019). Scaled von Mises-Fisher distributions and regression models for paleomagnetic directional data.
-Journal of the American Statistical Association, 114(528):  1547--1560.
+Tsagris M. and Alenazi A. (2019). Comparison of discriminant analysis methods on the sphere.
+Communications in Statistics: Case Studies, Data Analysis and Applications, 5(4): 467--491.
+
+Tsagris M., Papastamoulis P. and Kato S. (2025). Directional data analysis using the spherical Cauchy and the Poisson kernel-based distribution.
+Statistics and Computing, 35:51.
 }
 
 

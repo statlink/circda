@@ -64,9 +64,6 @@ The run time of the algorithm. A numeric vector. The first element is the user t
 }
 
 \references{
-Tsagris M., Papastamoulis P. and Kato S. (2025). Directional data analysis using the spherical Cauchy and the Poisson kernel-based distribution.
-Statistics and Computing, 35:51.
-
 Perdikis T., Alharbi N. and Tsagris M. (2026). Model--based clustering for spherical
 and hyper--spherical data using elliptically symmetric distributions.
 
