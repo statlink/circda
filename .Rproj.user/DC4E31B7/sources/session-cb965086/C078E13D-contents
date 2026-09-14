@@ -22,7 +22,7 @@ If the data are expressed in angles set this to FALSE.
 \item{type}{
 The distribution to fit, "vm" is von Mises mixtures, "cp" is circular Purkayastha mixtures,
 "pn" is projected normal mixtures, "gcpc" is GCPC mixtures and "cipc" is CIPC
-(or wrapped Cauchy) mixtures.
+(or wrapped Caucy) mixtures.
 }
 \item{G}{
 The maximum number of clusters to be tested. Default value is 5.

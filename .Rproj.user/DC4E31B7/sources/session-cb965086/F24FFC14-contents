@@ -25,7 +25,7 @@ If the data are expressed in angles set this to FALSE.
 \item{type}{
 The distribution to fit, "vm" is von Mises distribution, "cp" is the circular Purkayastha distribution,
 "pn" is projected normal distribution, "gcpc" is GCPC distribution and "cipc" is CIPC
-(or wrapped Cauchy) distribution.
+(or wrapped Caucy) distribution.
 }
 \item{influence}{
 If TRUE, this will compute the influence value of each observation based on the formula of
