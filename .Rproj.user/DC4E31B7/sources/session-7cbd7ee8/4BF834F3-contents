@@ -1,0 +1,91 @@
+\name{circ.gomp}
+\alias{circ.gomp}
+\title{
+Variable selection using the gamma-OMP algorithm
+}
+
+\description{
+Variable selection using the \eqn{\gamma}-OMP algorithm.
+}
+
+\usage{
+circ.gomp(y, x, rads = TRUE, type = "vm", xstand = TRUE, thresh = qchisq(0.95, 1),
+tol = 1e-6, maxiters = 100)
+}
+
+\arguments{
+\item{y}{
+A vector with the circular data expressed in radians, or angles.
+}
+\item{x}{
+The independent variable(s). Can be Euclidean or categorical (factor variables).
+}
+\item{rads}{
+If the data are expressed in angles set this to FALSE.
+}
+\item{type}{
+The distribution to fit, "vm" is von Mises distribution, "cp" is the circular Purkayastha distribution,
+"pn" is projected normal distribution, "gcpc" is GCPC distribution and "cipc" is CIPC
+(or wrapped Caucy) distribution.
+}
+\item{xstand}{
+Should the values of the predictor variables be standardized prior to the algorithm?
+}
+\item{thresh}{
+The critical value for the log-likelihood ratio test. This is by default the 95\% of the chi-square
+distribution with 1 degree of freedom.
+}
+\item{tol}{
+The tolerance value to terminate the Newton-Raphson algorithm.
+}
+\item{maxiters}{
+The maximum number of iterations allowed in the Newton-Raphson algorithm.
+}
+}
+
+\details{
+The function performs variable selection using the \eqn{\gamma}-OMP algorithm (Tsagris et al., 2022).
+}
+
+\value{
+A list including:
+\item{runtime}{
+The run time of the algorithm. A numeric vector. The first element is the user time, the second element
+is the system time and the third element is the elapsed time.
+}
+\item{result}{
+A matrix with the selected variables and the log-likelihood of the model at each step.
+}
+}
+
+\references{
+Tsagris M., Papadovasilakis Z., Lakiotaki K. and Tsamardinos, I. (2022). The \eqn{\gamma}-OMP Algorithm for
+Feature Selection With Application to Gene Expression Data.
+IEEE/ACM Transactions on Computational Biology and Bioinformatics, 19(2): 1214--1224.
+
+Tsagris M., Papastamoulis P. and Kato S. (2025). Directional data analysis using the spherical Cauchy and the
+Poisson kernel-based distribution.
+Statistics and Computing, 35:51.
+
+Presnell B., Morrison S. P. and Littell Ramon C. (1998). Projected multivariate linear models for directional data.
+Journal of the American Statistical Association, 93(443): 1068--1077.
+}
+
+\author{
+Michail Tsagris.
+
+R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr}.
+}
+%\note{
+%%  ~~further notes~~
+%}
+\seealso{
+\code{\link{circ.regs}
+}
+}
+
+\examples{
+y <- rcirc(500, mu = 3, kappa = 2, rads = TRUE, type = "vm")
+x <- matrix( rnorm(500 * 20), ncol = 20)
+mod <- circ.gomp(y, x)
+}
