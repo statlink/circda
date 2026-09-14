@@ -1,0 +1,180 @@
+circ.reg <- function(y, x, rads = TRUE, type = "vm", influence = FALSE, xnew = NULL, tol = 1e-6, maxiters = 100) {
+
+  if ( !is.matrix(y) ) {
+    if ( !rads )  y <- y * pi / 180
+    y <- cbind( cos(y), sin(y) )
+  }
+
+  if ( type == "vm" ) {
+    res <- .vm.reg(y = y, x = x, rads = rads, influence = influence, xnew = xnew, tol = tol, maxiters = maxiters)
+  } else if ( type == "cp" ) {
+    res <- Directional::circpurka.reg(y = y, x = x, rads = rads, xnew = xnew)
+
+  } else if ( type == "pn" ) {
+    res <- Directional::spml.reg(y = y, x = x, rads = rads, xnew = xnew, seb = TRUE, tol = tol, maxiters = maxiters)
+    IF <- NULL
+    if ( influence ) {
+      n <- dim(y)[1]   ;   con <- sqrt(2 * pi)
+      x <- model.matrix( ~., data.frame(x) )
+      ci <- y[, 1]   ;   si <- y[, 2]
+      mu <- x %*% res$be
+      tau <- Rfast::rowsums(y * mu)
+      ptau <- pnorm(tau)
+      rat <- ptau / ( exp(-0.5 * tau^2)/con + tau * ptau )
+      psit <- tau + rat
+      psit2 <- 2 - tau * rat - rat^2
+      a11 <- crossprod(x, x * (psit2 * ci^2 - 1) )
+      a12 <- crossprod(x, x * (psit2 * ci * si ) )
+      a22 <- crossprod(x, x * (psit2 * si^2 - 1 ) )
+      der2 <- cbind( rbind(a11, a12), rbind(a12, a22) )
+      IF <- numeric(n)
+      Hinv <-  - solve(der2)
+      resid <-  - mu + psit * y
+      for ( i in 1:n ) {
+        grad <- as.vector( crossprod(x[i, , drop = FALSE], resid[i, , drop = FALSE]) )
+        IF[i] <- grad %*% Hinv %*% grad
+      }
+    }
+    res$IF <- IF
+
+  } else if ( type == "gcpc" ) {
+    res <- Directional::gcpc.reg(y = y, x = x, rads = rads, xnew = xnew)
+  } else if ( type == "cipc" ) {
+    res <- Directional::cipc.reg(y = y, x = x, rads = rads, xnew = xnew, tol = tol, maxiters = maxiters)
+    IF <- NULL
+    if ( influence ) {
+      x <- model.matrix( ~., data.frame(x) )
+      n <- dim(y)[1]  ;  p <- dim(x)[2]
+      mu <- x %*% res$be
+      g2 <- Rfast::rowsums(mu^2)
+      a <- Rfast::rowsums(y * mu)
+      com <- sqrt(g2 + 1)
+      com2 <- com - a
+      muc_y <- mu / com - y
+      der1 <- (x * muc_y[, 1] / com2 )
+      der2 <- (x * muc_y[, 2] / com2 )
+      ### Jacobian of b1
+      a1 <- ( com - mu[, 1]^2 / com ) / ( com^2 * com2 )
+      up1 <- crossprod(x, x * a1)
+      up2 <- crossprod(x * muc_y[, 1]/com2)
+      H[1:p, 1:p] <- up2 - up1
+      ### Jacobian of b2
+      a1 <- ( com - mu[, 2]^2 / com ) / ( com^2 * com2 )
+      up1 <- crossprod(x, x * a1)
+      up2 <- crossprod(x * muc_y[, 2]/com2)
+      H[(p + 1):(2*p), (p + 1):(2*p)] <- up2 - up1
+      ### Jacobian of b12
+      a1 <- mu[, 1] * mu[, 2] / ( com^3 * com2)
+      up1 <- crossprod(x, x * a1)
+      up2 <- crossprod(x * muc_y[, 1]/com2, x * muc_y[, 2]/com2)
+      H[1:p, (p + 1):(2*p)] <- H[(p + 1):(2*p), 1:p] <- up2 + up1
+
+      IF <- numeric(n)
+      Hinv <-  - solve(H)
+      for ( i in 1:n ) {
+        grad <- c(der1[i, ], der2[i, ])
+        IF[i] <- grad %*% Hinv %*% grad
+      }
+    }
+    res$IF <- IF
+  }
+  res
+}
+
+
+
+.vm.reg <- function(y, x, rads = TRUE, influence = FALSE, xnew = NULL, tol = 1e-6, maxiters = 100) {
+
+  tic <- proc.time()
+
+  x <- model.matrix( ~., data.frame(x) )
+  dm <- dim(x)
+  n <- dm[1]  ;  p <- dm[2] - 1
+
+  be <- solve( crossprod(x), crossprod(x, y) )  ## initial values for the beta
+  mu <- x %*% be
+  ki <- sqrt( Rfast::rowsums(mu^2) )
+  lik1 <- sum(mu * y) - sum( log(besselI(ki, 0, expon.scaled = TRUE) ) + ki )
+
+  A1  <- besselI(ki, 1) / besselI(ki, 0)                  ## n
+  A1d <- 1 - A1 / ki - A1^2                               ## A'_1(kappa), n
+  ## --- gradient: p x 2 ---
+  resid <- y - (A1 / ki) * mu                             ## n x 2
+  grad <- crossprod(x, resid)                            ## p x 2
+  ## --- Hessian weights ---
+  mu_ki  <- mu / ki                                       ## n x 2, unit vectors
+  d11 <- A1d * mu_ki[, 1]^2 + (A1 / ki) * (1 - mu_ki[, 1]^2)
+  d22 <- A1d * mu_ki[, 2]^2 + (A1 / ki) * (1 - mu_ki[, 2]^2)
+  d12 <- (A1d - A1/ki) * mu_ki[, 1] * mu_ki[, 2]
+  ## --- Hessian blocks: each is p x p ---
+  H11 <-  -crossprod(x * d11, x)
+  H22 <-  -crossprod(x * d22, x)
+  H12 <-  -crossprod(x * d12, x)
+  ## --- full 2p x 2p Hessian ---
+  H <- rbind( cbind(H11, H12), cbind(H12, H22) )
+
+  be <- be - solve(H, as.vector(grad) )
+  be <- matrix(be, ncol = 2)
+  mu <- x %*% be
+  ki <- sqrt( Rfast::rowsums(mu^2) )
+  lik2 <- sum(mu * y) - sum( log(besselI(ki, 0, expon.scaled = TRUE) ) + ki )
+
+  i <- 2
+  while ( lik2 - lik1 > tol  &  i < maxiters ) {
+    i <- i + 1
+    lik1 <- lik2
+
+    A1  <- besselI(ki, 1) / besselI(ki, 0)                  ## n
+    A1d <- 1 - A1 / ki - A1^2                               ## A'_1(kappa), n
+    ## --- gradient: p x 2 ---
+    resid <- y - (A1 / ki) * mu                             ## n x 2
+    grad <- crossprod(x, resid)                            ## p x 2
+    ## --- Hessian weights ---
+    mu_ki  <- mu / ki                                       ## n x 2, unit vectors
+    d11 <- A1d * mu_ki[, 1]^2 + (A1 / ki) * (1 - mu_ki[, 1]^2)
+    d22 <- A1d * mu_ki[, 2]^2 + (A1 / ki) * (1 - mu_ki[, 2]^2)
+    d12 <- (A1d - A1/ki) * mu_ki[, 1] * mu_ki[, 2]
+    ## --- Hessian blocks: each is p x p ---
+    H11 <-  -crossprod(x * d11, x)
+    H22 <-  -crossprod(x * d22, x)
+    H12 <-  -crossprod(x * d12, x)
+    ## --- full 2p x 2p Hessian ---
+    H <- rbind( cbind(H11, H12), cbind(H12, H22) )
+
+    be <- be - solve(H, as.vector(grad) )
+    be <- matrix(be, ncol = 2)
+    mu <- x %*% be
+    ki <- sqrt( Rfast::rowsums(mu^2) )
+    lik2 <- sum(mu * y) - sum( log(besselI(ki, 0, expon.scaled = TRUE) ) + ki )
+  }
+
+  runtime <- proc.time() - tic
+
+  est <- NULL
+  if ( !is.null(xnew) ) {
+    xnew <- model.matrix(~., data.frame(xnew))
+    est <- xnew %*% be
+    est <- ( atan(est[, 2]/est[, 1]) + pi * I(est[, 1] < 0) ) %% (2 * pi)
+    if ( !rads )  est <- est * 180 / pi
+  }
+
+  seb <- sqrt( - diag( solve(H) ) )
+  seb <- matrix(seb, ncol = 2)
+  colnames(be) <- colnames(seb) <- c("Cosinus of y", "Sinus of y")
+  rownames(be) <- rownames(seb) <- colnames(x)
+
+  loglik <- lik2 - n * log(2 * pi)
+
+  IF <- NULL
+  if ( influence ) {
+    IF <- numeric(n)
+    Hinv <-  - solve(H)
+    for ( i in 1:n ) {
+      grad <- as.vector( crossprod(x[i, , drop = FALSE], resid[i, , drop = FALSE]) )
+      IF[i] <- grad %*% Hinv %*% grad
+    }
+  }
+
+  list(runtime = runtime, be = be, seb = seb, loglik = loglik, ki = ki, est = est, IF = IF)
+
+}

@@ -1,5 +1,5 @@
-\name{cv.circridge}
-\alias{cv.circridge}
+\name{circridge.cv}
+\alias{circridge.cv}
 \title{
 Cross-validation for the ridge circular regression
 }
@@ -9,7 +9,7 @@ Cross-validation for the ridge circular regression.
 }
 
 \usage{
-cv.circridge(y, x, rads = TRUE, type = "vm", lambda = NULL, nlambda = 100, tol = 1e-06,
+circridge.cv(y, x, rads = TRUE, type = "vm", lambda = NULL, nlambda = 100, tol = 1e-06,
 maxiters = 100, folds = NULL, nfolds = 10, seed = NULL)
 }
 

@@ -11,7 +11,6 @@ importFrom("stats", kmeans, optimize, optim, pnorm, dnorm, rnorm, model.matrix,
 importFrom("graphics", abline, lines, points, arrows)
 importFrom("rangen", Runif)
 importFrom("circular", circular)
-importFrom("glmnet", glmnet)
 
 exportPattern("^[[:alpha:]]+")
 exportPattern("^[^\\.]")

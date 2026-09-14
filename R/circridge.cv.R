@@ -1,4 +1,4 @@
-cv.circridge <- function(y, x, rads = TRUE, type = "vm", lambda = NULL, nlambda = 100, tol = 1e-06, maxiters = 100,
+circridge.cv <- function(y, x, rads = TRUE, type = "vm", lambda = NULL, nlambda = 100, tol = 1e-06, maxiters = 100,
                         folds = NULL, nfolds = 10, seed = NULL) {
   runtime <- proc.time()
   if ( !is.matrix(y) ) {
@@ -6,7 +6,7 @@ cv.circridge <- function(y, x, rads = TRUE, type = "vm", lambda = NULL, nlambda 
     y <- cbind( cos(y), sin(y) )
   }
   n <- dim(x)[1]
-  if ( is.null(folds) )  folds <- Compositional::makefolds(1:n, nfolds = nfolds, seed = seed, stratified = FALSE)
+  if ( is.null(folds) )  folds <- Directional::makefolds(1:n, nfolds = nfolds, seed = seed, stratified = FALSE)
   nfolds <- length(folds)
   lamkld <- list()
 

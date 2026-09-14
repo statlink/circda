@@ -1,5 +1,6 @@
 #useDynLib(pchc, .registration = TRUE)
 
+importFrom("")
 importFrom("Directional", makefolds, purka.mle, spml.mle, gcpc.mle2, cipc.mle,
            dvm, dspml, dpurka, dgcpc, dcipc, mixvmf.mle, mixspcauchy.mle, rvonmises,
            bic.mixvmf, bic.mixspcauchy, rmixvmf, rcircpurka, rspml, rgcpc, rcipc,
@@ -11,7 +12,6 @@ importFrom("stats", kmeans, optimize, optim, pnorm, dnorm, rnorm, model.matrix,
 importFrom("graphics", abline, lines, points, arrows)
 importFrom("rangen", Runif)
 importFrom("circular", circular)
-importFrom("glmnet", glmnet)
 
 exportPattern("^[[:alpha:]]+")
 exportPattern("^[^\\.]")
