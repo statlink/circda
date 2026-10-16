@@ -13,8 +13,7 @@ perm.reg <- function(y, x, rads = TRUE, type = "vm", tol = 1e-6, maxiters = 500,
     m <- m0$circmu 
   }  
 
-  stat <- circ.reg(y = y, x = x, rads = rads, type = type, tol = tol, maxiters = maxiters)$loglik -
-          circda::circ.mle(y, rads = TRUE, type = type, tol = tol, maxiters = maxiters)$loglik
+  stat <- circda::circ.reg(y = y, x = x, rads = TRUE, type = type, tol = tol, maxiters = maxiters)$loglik - m0$loglik
   ei <- y - m
   ei <- cbind( cos(ei), sin(ei) )
   ei <- ( atan(ei[, 2]/ei[, 1]) + pi * I(ei[, 1] < 0) ) %% (2 * pi)  
