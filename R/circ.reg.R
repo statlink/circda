@@ -96,13 +96,13 @@ circ.reg <- function(y, x, rads = TRUE, type = "vm", influence = FALSE, xnew = N
   ki <- sqrt( Rfast::rowsums(mu^2) )
   lik1 <- sum(mu * y) - sum( log(besselI(ki, 0, expon.scaled = TRUE) ) + ki )
 
-  A1  <- besselI(ki, 1) / besselI(ki, 0)                  ## n
-  A1d <- 1 - A1 / ki - A1^2                               ## A'_1(kappa), n
+  A1  <- besselI(ki, 1, expon.scaled = TRUE) / besselI(ki, 0, expon.scaled = TRUE)
+  A1d <- 1 - A1 / ki - A1^2                              
   ## --- gradient: p x 2 ---
-  resid <- y - (A1 / ki) * mu                             ## n x 2
-  grad <- crossprod(x, resid)                            ## p x 2
+  resid <- y - (A1 / ki) * mu                            
+  grad <- crossprod(x, resid)                            
   ## --- Hessian weights ---
-  mu_ki  <- mu / ki                                       ## n x 2, unit vectors
+  mu_ki  <- mu / ki                                       
   d11 <- A1d * mu_ki[, 1]^2 + (A1 / ki) * (1 - mu_ki[, 1]^2)
   d22 <- A1d * mu_ki[, 2]^2 + (A1 / ki) * (1 - mu_ki[, 2]^2)
   d12 <- (A1d - A1/ki) * mu_ki[, 1] * mu_ki[, 2]
@@ -124,13 +124,13 @@ circ.reg <- function(y, x, rads = TRUE, type = "vm", influence = FALSE, xnew = N
     i <- i + 1
     lik1 <- lik2
 
-    A1  <- besselI(ki, 1) / besselI(ki, 0)                  ## n
-    A1d <- 1 - A1 / ki - A1^2                               ## A'_1(kappa), n
+    A1  <- besselI(ki, 1, expon.scaled = TRUE) / besselI(ki, 0, expon.scaled = TRUE)
+    A1d <- 1 - A1 / ki - A1^2                               
     ## --- gradient: p x 2 ---
-    resid <- y - (A1 / ki) * mu                             ## n x 2
-    grad <- crossprod(x, resid)                            ## p x 2
+    resid <- y - (A1 / ki) * mu                             
+    grad <- crossprod(x, resid)                            
     ## --- Hessian weights ---
-    mu_ki  <- mu / ki                                       ## n x 2, unit vectors
+    mu_ki  <- mu / ki                                      
     d11 <- A1d * mu_ki[, 1]^2 + (A1 / ki) * (1 - mu_ki[, 1]^2)
     d22 <- A1d * mu_ki[, 2]^2 + (A1 / ki) * (1 - mu_ki[, 2]^2)
     d12 <- (A1d - A1/ki) * mu_ki[, 1] * mu_ki[, 2]
