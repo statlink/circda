@@ -37,7 +37,7 @@ If you have the list with the folds supply it here. You can also leave it NULL
 and it will create folds.
 }
 \item{graph}{
-If graph is TRUE (default value) a plot will appear.
+If graph is TRUE a plot will appear.
 }
 \item{ncores}{
 The number of cores to use. Default value is 1.

@@ -1,0 +1,89 @@
+\name{cv.vmfkernelda}
+\alias{cv.vmfkernelda}
+\title{
+Cross-validation for the kernel discriminant analysis of (hyper-)spherical data
+}
+
+\description{
+Cross-validation for the kernel discriminant analysis of (hyper-)spherical data.
+}
+
+\usage{
+cv.vmfkernelda(y, ina, h = "rot", folds = NULL, nfolds = 10,
+stratified = TRUE, ncores = 1)
+}
+
+\arguments{
+\item{y}{
+A numeric vector containing the circular data.
+}
+\item{ina}{
+A numeric vector (or factor) with the group of each observation in y, taking the values 1, 2, ...
+}
+\item{h}{
+The bandwidth. Either "rot" for the rule suggested by Garcia-Portugues (2013),
+a single number used for all groups, or a vector with one bandwidth for each group.
+}
+\item{folds}{
+If you have a list with the folds pass it here.
+}
+\item{nfolds}{
+The number of folds to create.
+}
+\item{stratified}{
+Should the folds be created using stratified random sampling?
+}
+\item{ncores}{
+The number of cores (threads) to use. The default is 1. If the package was built without
+OpenMP support, this argument is ignored and a single core is used.
+}
+}
+
+\details{
+The user has the option to use a bandwidth he/she has found in some way
+(cross-validation) or estimate it as Taylor (2008) or Garcia-Portugues (2013), separately for each group.
+
+Each new observation is allocated to the group with the highest score, i.e. the logarithm of
+the prior probability of the group times the kernel density estimate of that group at the new
+observation. The scores are computed in C++, one new observation at a time, so the matrix of
+all inner products between the new and the training observations is never formed and the memory
+requirements stay low even when there are many new observations. When ncores > 1 the new observations are split across threads using OpenMP.
+}
+
+\value{
+A list including:
+\item{per}{
+The estimated predictive performance of each fold.
+}
+\item{perf}{
+The estimated predictive performance.
+}
+}
+
+\references{
+Garcia Portugues, E. (2013). Exact risk improvement of bandwidth selectors for kernel
+density estimation with directional data. Electronic Journal of Statistics, 7, 1655--1685.
+}
+
+\author{
+Michail Tsagris.
+
+R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr}.
+}
+
+%\note{
+%%  ~~further notes~~
+%}
+
+\seealso{
+\code{ \link{vmf.kernel.da}, \link{vmf.kernel},
+}
+}
+
+\examples{
+y1 <- Rfast::rvmf(100, c(1, 0, 0), 10)
+y2 <- Rfast::rvmf(100, c(0, 1, 0), 5)
+y <- rbind(y1, y2)
+ina <- rep(1:2, each = 100)
+mod <- cv.vmfkernelda(y, ina)
+}

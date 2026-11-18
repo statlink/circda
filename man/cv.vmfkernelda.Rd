@@ -31,7 +31,7 @@ If you have a list with the folds pass it here.
 The number of folds to create.
 }
 \item{stratified}{
-Should the folds be created using statified random sampling?
+Should the folds be created using stratified random sampling?
 }
 \item{ncores}{
 The number of cores (threads) to use. The default is 1. If the package was built without

@@ -90,5 +90,5 @@ y2 <- cbind(x1, x2)
 y <- rbind(y1, y2)
 ina <- rep(1:2, each = 100)
 est <- vm.nb(y, y, ina, h = "tay")
-table(ina, est)
+table(ina, est$class)
 }

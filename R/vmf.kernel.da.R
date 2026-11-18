@@ -6,8 +6,8 @@ vmf.kernel.da <- function(ynew, y, ina, h = "rot", ncores = 1) {
   ina <- as.numeric(ina)  ;  k <- max(ina)  ;  ni <- tabulate(ina)
   prior <- ni / length(ina)
   if ( is.character(h) ) {
-    hrule <- h  ;  h <- numeric(k)
-    for (j in 1:k)  h[j] <- Directionalkernel::vmf.kernel(y[ina == j, , drop = FALSE], h = hrule, ncores = ncores)$h
+    hrule <- h  ;  h <- rep(NA_real_, k)
+    for ( j in which(ni > 0) )  h[j] <- .vmf.bw(y[ina == j, , drop = FALSE], hrule)
   } else if ( length(h) == 1 )  h <- rep(h, k)
   kappa <- 1 / h^2
   ## log C_p(kappa)

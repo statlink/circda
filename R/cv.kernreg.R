@@ -1,9 +1,9 @@
 cv.kernreg <- function(y, x, rads = TRUE, h = seq(0.1, 1, length = 10), type = "gauss",
                          nfolds = 10, folds = NULL, graph = FALSE, ncores = 1) {
-  if ( !is.matrix(y) ) {
+  if ( is.null(dim(y)) ) {
     if ( !rads )  y <- y / 180 * pi
     y <- cbind( cos(y), sin(y) )
-  }
+  } else y <- as.matrix(y)
   n <- dim(y)[1]
   runtime <- proc.time()
   ina <- 1:n
@@ -19,7 +19,7 @@ cv.kernreg <- function(y, x, rads = TRUE, h = seq(0.1, 1, length = 10), type = "
     ytest <- y[nu, , drop = FALSE]
     xtest <- x[nu, , drop = FALSE]
     xtrain <- x[-nu, , drop = FALSE]
-    est <- Directionalkernel::kernreg(xtest, ytrain, xtrain, h, type = type, ncores = ncores)
+    est <- Directionalkernel::kernreg(xtest, ytrain, xtrain, rads = TRUE, h, type = type, ncores = ncores)
     for ( j in 1:lh )  msp[i, j] <- 0.5 - 0.5 * mean( Rfast::rowsums(est[[ j ]] * ytest) )
   }
 

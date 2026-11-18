@@ -18,7 +18,9 @@ static int n_threads(int ncores) {
 }
 
 // Shared worker: y is a q x n matrix (one observation per column, as y <- t(x) in R).
-// Returns f[i] = sum_{j != i} exp( s * <y_i, y_j> ) * com.
+// Returns f[i] = sum_{j != i} exp( s * (<y_i, y_j> - 1) ) * com.
+// Subtracting 1 keeps the exponent <= 0, so exp() cannot overflow for large s;
+// com must therefore use the exponentially scaled Bessel function.
 // The dot products are symmetric, so each pair (i, j) is computed once
 // and added to both f[i] and f[j]: n(n-1)/2 exp() calls instead of n(n-1).
 // With several threads each thread accumulates into its own vector of length n
@@ -46,7 +48,7 @@ static NumericVector kernel_loop(const NumericMatrix& y, const double s, const d
       const double* yj = Y + (std::size_t)j * q;
       double d = 0.0;
       for (int k = 0; k < q; ++k) d += yi[k] * yj[k];
-      const double e = std::exp(s * d);
+      const double e = std::exp(s * (d - 1.0));
       ai += e;
       a[j] += e;
     }
@@ -68,6 +70,7 @@ static NumericVector kernel_loop(const NumericMatrix& y, const double s, const d
 //     f[i] <- sum( exp(disa)^h ) / com
 //   }
 // y is the 2 x n matrix rbind(cos(u), sin(u)); exp(disa)^h = exp(h * disa).
+// com = (n - 1) * 2 * pi * besselI(h, 0, expon.scaled = TRUE).
 // [[Rcpp::export]]
 NumericVector vm_kernel_cpp(NumericMatrix y, double h, double com, int ncores = 1) {
   return kernel_loop(y, h, 1.0 / com, ncores);
@@ -78,7 +81,7 @@ NumericVector vm_kernel_cpp(NumericMatrix y, double h, double com, int ncores = 
 //     disa <- Rfast::eachcol.apply(y, y[, i])[-i] / h^2
 //     f[i] <- sum( exp(disa) ) * com
 //   }
-// y is the p x n matrix t(x).
+// y is the p x n matrix t(x). com uses besselI(1/h^2, p/2 - 1, expon.scaled = TRUE).
 // [[Rcpp::export]]
 NumericVector vmf_kernel_cpp(NumericMatrix y, double h, double com, int ncores = 1) {
   return kernel_loop(y, 1.0 / (h * h), com, ncores);

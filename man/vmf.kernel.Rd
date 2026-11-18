@@ -14,7 +14,7 @@ vmf.kernel(y, h = "rot", ncores = 1)
 
 \arguments{
 \item{y}{
-A matrix with unit vectors, i.e. the data being expressed in Euclidean cordinates.
+A matrix with unit vectors, i.e. the data being expressed in Euclidean coordinates.
 }
 \item{h}{
 The bandwidth. Either "rot" for the rule suggested by Garcia-Portugues (2013) or a number.

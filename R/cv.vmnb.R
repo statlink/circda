@@ -1,4 +1,4 @@
-cv.vmnb <- function(y, ina, h = "rot", rads = TRUE, folds = NULL, nfolds = 10,
+cv.vmnb <- function(y, ina, h = "tay", rads = TRUE, folds = NULL, nfolds = 10,
                     stratified = TRUE, ncores = 1) {
 
   ina <- as.numeric(ina)

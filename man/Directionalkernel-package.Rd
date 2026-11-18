@@ -7,7 +7,7 @@
 
 \description{
 Functions to perform kernel density estimation, kernel discriminant analysis, and
-kernel regression with circula or (hyper-)spherical data.
+kernel regression with circular or (hyper-)spherical data.
 }
 
 \details{

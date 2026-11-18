@@ -1,4 +1,4 @@
-cv.vmkernelda <- function(y, ina, h = "rot", rads = TRUE, folds = NULL, nfolds = 10,
+cv.vmkernelda <- function(y, ina, h = "tay", rads = TRUE, folds = NULL, nfolds = 10,
                           stratified = TRUE, ncores = 1) {
 
   if ( !rads )  y <- y / 180 * pi

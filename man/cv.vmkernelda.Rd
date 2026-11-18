@@ -9,7 +9,7 @@ Cross-validation for the kernel discriminant analysis of circular data.
 }
 
 \usage{
-cv.vmkernelda(y, ina, h = "rot", rads = TRUE, folds = NULL, nfolds = 10,
+cv.vmkernelda(y, ina, h = "tay", rads = TRUE, folds = NULL, nfolds = 10,
 stratified = TRUE, ncores = 1)
 }
 
@@ -21,8 +21,9 @@ A numeric vector containing the circular data.
 A numeric vector (or factor) with the group of each observation in y, taking the values 1, 2, ...
 }
 \item{h}{
-The bandwidth. Either "rot" for the rule suggested by Garcia-Portugues (2013),
-a single number used for all groups, or a vector with one bandwidth for each group.
+The bandwidth. Either "tay" for the rule suggested by Taylor (2008), "rot" for the rule
+suggested by Garcia-Portugues (2013), a single number used for all groups, or a vector with
+one bandwidth for each group.
 }
 \item{rads}{
 If the data are in radians, this should be TRUE and FALSE otherwise.
@@ -34,7 +35,7 @@ If you have a list with the folds pass it here.
 The number of folds to create.
 }
 \item{stratified}{
-Should the folds be created using statified random sampling?
+Should the folds be created using stratified random sampling?
 }
 \item{ncores}{
 The number of cores (threads) to use. The default is 1. If the package was built without
@@ -64,6 +65,9 @@ The estimated predictive performance.
 }
 
 \references{
+Taylor, C. C. (2008). Automatic bandwidth selection for circular density estimation.
+Computational Statistics & Data Analysis, 52(7): 3493--3500.
+
 Garcia Portugues, E. (2013). Exact risk improvement of bandwidth selectors for kernel
 density estimation with directional data. Electronic Journal of Statistics, 7, 1655--1685.
 }
