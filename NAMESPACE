@@ -1,18 +1,11 @@
-#useDynLib(pchc, .registration = TRUE)
+useDynLib(Directionalkernel, .registration = TRUE)
+importFrom(Rcpp, evalCpp)
 
-importFrom("Directional", makefolds, purka.mle, spml.mle, gcpc.mle2, cipc.mle,
-           dvm, dspml, dpurka, dgcpc, dcipc, mixvmf.mle, mixspcauchy.mle, rvonmises,
-           bic.mixvmf, bic.mixspcauchy, rmixvmf, rcircpurka, rspml, rgcpc, rcipc,
-           colvm.mle, colspml.mle)
-importFrom("Rfast", colmeans, rowsums, vm.mle, rowMaxs,
-           mediandir, vmf.mle, eachcol.apply)
-importFrom("stats", kmeans, optimize, optim, pnorm, dnorm, rnorm, model.matrix,
-           pchisq, cov, qchisq, coef)
-importFrom("graphics", abline, lines, points, arrows)
-importFrom("rangen", Runif)
-importFrom("circular", circular)
-importFrom("glmnet", glmnet)
+importFrom("Rfast", rowmeans, vmf.mle, rowMaxs)
+importFrom("stats", optimize)
+importFrom("kernreg", kern_reg)
+importFrom("graphics", abline, lines, points)
 
-exportPattern("^[[:alpha:]]+")
-exportPattern("^[^\\.]")
+export(vm.kernel, vmf.kernel, kernreg, cv.kernreg,
+vm.kernel.da, vmf.kernel.da, cv.vmkernelda, cv.vmfkernelda)
 

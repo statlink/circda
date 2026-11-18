@@ -1,0 +1,15 @@
+Package: Directionalkernel
+Type: Package
+Title: Kernel Related Functions for Directional Data
+Version: 1.0
+Date: 2026-11-16
+Authors@R: person("Michail", "Tsagris", role = c("aut", "cre"), email = "mtsagris@uoc.gr")
+Author: Michail Tsagris [aut, cre]
+Maintainer: Michail Tsagris <mtsagris@uoc.gr>
+Depends: R (>= 4.0)
+Imports: Rcpp, Rfast, stats
+LinkingTo: Rcpp
+Suggests: Directional, circda, Rfast2
+Description: Functions to perform kernel density estimation, kernel discriminant analysis, and kernel regression with circula or (hyper-)spherical data. The references include: Taylor C. C. (2008) <doi:10.1016/j.csda.2007.11.003>, and Garcia Portugues E. (2013) <doi:10.1214/13-EJS821>.   
+License: GPL (>= 2)
+

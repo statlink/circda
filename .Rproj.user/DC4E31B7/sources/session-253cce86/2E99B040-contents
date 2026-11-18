@@ -1,0 +1,9 @@
+useDynLib(Directionalkernel, .registration = TRUE)
+importFrom(Rcpp, evalCpp)
+
+importFrom("Rfast", rowmeans, vmf.mle)
+importFrom("stats", optimize)
+importFrom("kernreg", kern_reg)
+
+export(vm.kernel, vmf.kernel, kernreg, cv.kernreg)
+

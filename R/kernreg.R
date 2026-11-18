@@ -1,0 +1,9 @@
+kernreg <- function(xnew, y, x, rads = TRUE, h = as.numeric( c(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0 )),
+                     type = "gauss", ncores = 1L) {
+  if ( !is.matrix(y) ) {
+    if ( !rads )  y <- y / 180 * pi
+    y <- cbind( cos(y), sin(y) )
+  }
+  est <- kernreg::kern_reg(xnew, y, x, h, type, ncores)
+  est2 <- lapply(est, function(x) x / sqrt( Rfast::rowsums(x^2) ) )
+}

@@ -1,0 +1,10 @@
+useDynLib(Directionalkernel, .registration = TRUE)
+importFrom(Rcpp, evalCpp)
+
+importFrom("Rfast", rowmeans, vmf.mle, rowMaxs)
+importFrom("stats", optimize)
+importFrom("kernreg", kern_reg)
+importFrom("graphics", abline, lines, points)
+
+export(vm.kernel, vmf.kernel, kernreg, cv.kernreg)
+

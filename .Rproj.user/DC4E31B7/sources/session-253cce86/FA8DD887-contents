@@ -1,0 +1,18 @@
+vm.kernel.da <- function(ynew, y, ina, h = "tay", rads = TRUE) {
+  if ( !rads ) {  y <- y / 180 * pi  ;  ynew <- ynew / 180 * pi  }
+  ina <- as.numeric(ina)  ;  k <- max(ina)  ;  ni <- tabulate(ina)
+  prior <- ni / length(ina)
+  if ( is.character(h) ) {
+    hrule <- h  ;  h <- numeric(k)
+    for (j in 1:k)  h[j] <- Directionalkernel::vm.kernel(y[ina == j], h = hrule)$h
+  } else if ( length(h) == 1 )  h <- rep(h, k)
+  score <- matrix(0, length(ynew), k)
+  for (j in 1:k) {
+    a <- h[j] * cos( outer(ynew, y[ina == j], "-") )
+    my <- Rfast::rowMaxs(a, value = TRUE)
+    score[, j] <- log(prior[j]) + my + log( Rfast::rowsums( exp(a - my) ) ) - log(ni[j]) -
+                  log(2 * pi) - log( besselI(h[j], 0, expon.scaled = TRUE) ) - h[j]
+  }
+  list( h = h, class = Rfast::rowMaxs(score), score = score )
+}
+

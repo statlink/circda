@@ -1,0 +1,22 @@
+vmf.kernel.da <- function(xnew, x, ina, h = "rot") {
+  xnew <- as.matrix(xnew)  ;  x <- as.matrix(x)
+  p <- dim(x)[2]  ;  nu <- p/2 - 1
+  ina <- as.numeric(ina)  ;  k <- max(ina)  ;  ni <- tabulate(ina)
+  prior <- ni / length(ina)
+  if ( is.character(h) ) {
+    hrule <- h  ;  h <- numeric(k)
+    for (j in 1:k)  h[j] <- Directionalkernel::vmf.kernel(x[ina == j, , drop = FALSE], h = hrule)$h
+  } else if ( length(h) == 1 )  h <- rep(h, k)
+  kappa <- 1 / h^2
+  ## log C_p(kappa)
+  logcon <- nu * log(kappa) - 0.5 * p * log(2 * pi) -
+    log( besselI(kappa, nu, expon.scaled = TRUE) ) - kappa
+  score <- matrix(0, nrow(xnew), k)
+  for (j in 1:k) {
+    a <- kappa[j] * tcrossprod( xnew, x[ina == j, , drop = FALSE] )
+    mx <- Rfast::rowMaxs(a, value = TRUE)
+    score[, j] <- log(prior[j]) + mx + log( Rfast::rowsums( exp(a - mx) ) ) -
+                  log(ni[j]) + logcon[j]
+  }
+  list( h = h, class = Rfast::rowMaxs(score), score = score )
+}

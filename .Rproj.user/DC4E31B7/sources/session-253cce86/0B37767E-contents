@@ -1,0 +1,75 @@
+\name{von Mises-Fisher kernel discriminant analysis}
+\alias{vmf.kernel.da}
+\title{
+Kernel discriminant analysis of (hyper-)spherical data with a von Mises-Fisher kernel
+}
+
+\description{
+Kernel discriminant analysis of (hyper-)spherical data with a von Mises-Fisher kernel.
+}
+
+\usage{
+vmf.kernel.da(ynew, y, ina, h = "tay")
+}
+
+\arguments{
+\item{ynew}{
+A numeric vector containing the new (hyper-)spherical data.
+}
+\item{y}{
+A numeric vector containing the (hyper-)spherical data.
+}
+\item{ina}{
+The group of the y data.
+}
+\item{h}{
+The bandwidth. Either "rot" for the rule suggested by Garcia-Portugues (2013) or a number.
+}
+}
+
+\details{
+The user has the option to use a bandwidth he/she has found in some way
+(cross-validation) or estimate it as Taylor (2008) or Garcia-Portugues (2013).
+}
+
+\value{
+A list including:
+\item{h}{
+The estimated bandwidth of each group.
+}
+\item{class}{
+The estimated class of the new data.
+}
+\item{score}{
+The score of each predicted class.
+}
+}
+
+\references{
+Garcia Portugues, E. (2013). Exact risk improvement of bandwidth selectors for kernel
+density estimation with directional data. Electronic Journal of Statistics, 7, 1655--1685.
+}
+
+\author{
+Michail Tsagris.
+
+R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr}.
+}
+
+%\note{
+%%  ~~further notes~~
+%}
+
+\seealso{
+\code{\link{vmf.kernel}
+}
+}
+
+\examples{
+y <- Rfast::rvonmises(1000, 2.4, 10, rads = TRUE)
+hist(y, freq = FALSE)
+f1 <- vm.kernel(y, h = "rot", rads = TRUE)$f
+f2 <- vm.kernel(y, h = "tay", rads = TRUE)$f
+points(y, f1, col = 1)
+points(y, f2, col = 2)
+}

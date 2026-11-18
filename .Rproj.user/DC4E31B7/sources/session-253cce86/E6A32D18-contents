@@ -1,0 +1,81 @@
+\name{von Mises kernel discriminant analysis}
+\alias{vm.kernel.da}
+\title{
+Kernel discriminant analysis of circular data with a von Mises kernel
+}
+
+\description{
+Kernel discriminant analysis of circular data with a von Mises kernel.
+}
+
+\usage{
+vm.kernel.da(ynew, y, ina, h = "tay", rads = TRUE)
+}
+
+\arguments{
+\item{y}{
+A numeric vector containing the new circular data.
+}
+\item{y}{
+A numeric vector containing the circular data.
+}
+\item{ina}{
+The group of the y vector.
+}
+\item{h}{
+The bandwidth. Either "tay" for the rule suggested by Taylor or a number.
+}
+\item{rads}{
+If the data are in radians, this should be TRUE and FALSE otherwise.
+}
+}
+
+\details{
+The user has the option to use a bandwidth he/she has found in some way
+(cross-validation) or estimate it as Taylor (2008) or Garcia-Portugues (2013).
+}
+
+\value{
+A list including:
+\item{h}{
+The bandwidth. If the user chose one of "tay" or "rot" the estimated bandwidth will be returned.
+}
+\item{class}{
+The estimated class of the new data.
+}
+\item{score}{
+The score of each predicted class.
+}
+}
+
+\references{
+Taylor, C. C. (2008). Automatic bandwidth selection for circular density estimation.
+Computational Statistics & Data Analysis, 52(7): 3493--3500.
+
+Garcia Portugues, E. (2013). Exact risk improvement of bandwidth selectors for kernel
+density estimation with directional data. Electronic Journal of Statistics, 7, 1655--1685.
+}
+
+\author{
+Michail Tsagris.
+
+R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr}.
+}
+
+%\note{
+%%  ~~further notes~~
+%}
+
+\seealso{
+\code{\link{vmf.kernel}
+}
+}
+
+\examples{
+y <- Rfast::rvonmises(1000, 2.4, 10, rads = TRUE)
+hist(y, freq = FALSE)
+f1 <- vm.kernel(y, h = "rot", rads = TRUE)$f
+f2 <- vm.kernel(y, h = "tay", rads = TRUE)$f
+points(y, f1, col = 1)
+points(y, f2, col = 2)
+}

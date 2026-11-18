@@ -1,0 +1,72 @@
+\name{kernreg}
+\alias{kernreg}
+
+\title{
+Kernel regression with directional responses
+}
+
+\description{
+Kernel regression (Nadaraya-Watson estimator) with directional responses.
+}
+
+\usage{
+kernreg(xnew, y, x, h = as.numeric( c(0.1, 0.2, 0.3, 0.4, 0.5,
+0.6, 0.7, 0.8, 0.9, 1.0 )), type = "gauss", ncores = 1L)
+}
+
+\arguments{
+\item{xnew}{
+A matrix with the new predictor variables whose directional response values are to be predicted.
+}
+\item{y}{
+A matrix with directional data.
+}
+\item{x}{
+A matrix with the available predictor variables.
+}
+\item{h}{
+The bandwidth value(s) to consider.
+}
+\item{type}{
+The type of kernel to use, "gauss" or "laplace".
+}
+\item{ncores}{
+The number of cores to use. If greater than 1, parallel computing will take
+place. It is advisable to use it if you have many observations and or many
+variables, otherwise it will slow down the process. The default is 1, meaning
+that code is executed serially.
+}
+}
+
+\details{
+The Nadaraya-Watson estimator regression is applied.
+}
+
+\value{
+The fitted values. If multiple bandwidth values are considered then this is a list
+with many predictions, one set of predictions for each bandwidth value.
+}
+
+\references{
+Wand M. P. and Jones M. C. (1994). Kernel smoothing. CRC press.
+}
+
+\author{
+Michail Tsagris.
+}
+
+%\note{
+  %%  ~~further notes~~
+    %}
+
+\seealso{
+\code{\link{cv.kernreg}}
+}
+
+\examples{
+y <- iris[, 1:2]
+y <- y / sqrt( rowSums(y^2) )
+x <- iris[, 3:4]
+est <- kernreg(x, y, x, h = c(0.1, 0.2) )
+}
+
