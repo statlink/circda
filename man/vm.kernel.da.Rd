@@ -79,7 +79,7 @@ R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr}.
 %}
 
 \seealso{
-\code{\link{vm.kernel}, \link{vmf.kernel.da}
+\code{\link{vm.kernel}, \link{vmf.kernel.da}, \link{vm.nb}
 }
 }
 

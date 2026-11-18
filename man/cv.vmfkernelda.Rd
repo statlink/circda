@@ -55,7 +55,7 @@ A list including:
 \item{per}{
 The estimated predictive performance of each fold.
 }
-\item{class}{
+\item{perf}{
 The estimated predictive performance.
 }
 }

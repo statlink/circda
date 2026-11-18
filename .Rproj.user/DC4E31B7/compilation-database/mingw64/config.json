@@ -14,7 +14,7 @@
         "-IC:/rtools45/x86_64-w64-mingw32.static.posix/bin/../lib/gcc/x86_64-w64-mingw32.static.posix/14.3.0/../../../../include",
         "-IC:/rtools45/x86_64-w64-mingw32.static.posix/bin/../lib/gcc/x86_64-w64-mingw32.static.posix/14.3.0/include-fixed",
         "-include",
-        "C:/Users/mtsag/Desktop/Directionalkernel/.Rproj.user/DC4E31B7/compilation-database/mingw64/cpp-definitions.h"
+        "C:/Users/mtsag/Documents/GitHub/Directionalkernel/.Rproj.user/DC4E31B7/compilation-database/mingw64/cpp-definitions.h"
     ],
     "pch": "Rcpp",
     "is_cpp": true,
